@@ -1,5 +1,4 @@
 from fastapi import FastAPI, File, UploadFile
-import base64 
 import shutil
 import tensorflow as tf
 import numpy as np
@@ -18,19 +17,16 @@ async def predict(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
         
     X = imageio.imread(f'21{file.filename}')
-    print("esse foi")
     X = X / 255.
     X = np.array(X[np.newaxis])
 
     
     model = tf.keras.models.load_model('models_coughvid_model.h5')
-    print("esse foi também")
     
     y = model.predict(X)
     
     resultado = float(np.round(y[0][0], 0))
     
-    print(f'ESSE É O PREDICT  - - - - ->  {resultado}')
+    print(f'PREDICT  - - - - ->  {resultado}')
     
     return {"pred": resultado}
-#

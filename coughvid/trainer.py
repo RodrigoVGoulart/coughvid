@@ -11,6 +11,7 @@ x_LOCATION = 'models/coughvid/X_test_500.npy'
 y_LOCATION = 'models/coughvid/y_test_500.npy'
 
 def get_data():
+    """finds necessary data at specified gcp bucket location"""
     client = storage.Client()
     bucket = client.get_bucket(BUCKET_NAME)
 
@@ -28,6 +29,7 @@ def get_data():
     return X_train, X_test, y_train, y_test
 
 def initialize_model():
+    """defines model"""
     model = models.Sequential()
 
     #first_convolution
@@ -53,6 +55,7 @@ def initialize_model():
     return model
 
 def train_model(X_train, y_train):
+    """defines parameters to fit and train model"""
     model = initialize_model()
     value, counts = np.unique(y_train, return_counts=True)
     weight_COVID = counts[0] / counts[1]
@@ -63,7 +66,7 @@ def train_model(X_train, y_train):
 
 
 def upload_model_to_gcp():
-
+    """uploads model and saves necessary files"""
     client = storage.Client()
 
     bucket = client.bucket(BUCKET_NAME)
